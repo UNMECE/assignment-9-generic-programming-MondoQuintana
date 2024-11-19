@@ -1,4 +1,7 @@
+#include <stdlib.h>
 #include <iostream>
+#include <random>
+#include <functional>
 using namespace std;
 
 template <typename item>
@@ -75,35 +78,76 @@ public:
         return sum;
     }
     item getMax(){
-        item max;
+        item max=0;
         struct vec *ptr=begin;
         max=ptr->val;
         while (ptr!=NULL)
         {
-            ptr=ptr->next;
             if (ptr->val>=max)
             {
                 max=ptr->val;
             }
-            else{
-                max=max;
-            }
+            ptr=ptr->next;
         }
         return max;
+    }
+    item getMin(){
+        item min=0;
+        struct vec *ptr=begin;
+        min=ptr->val;
+        while (ptr!=NULL)
+        {
+            if (ptr->val<=min)
+            {
+                min=ptr->val;
+            }
+            ptr=ptr->next;
+        }
+        return min;
+    }
+    double* getSlice(int start, int end){
+        double* t = new double[1+(end-start)];
+        struct vec *ptr=begin;
+        for (int i = 0; i < start; i++)
+        {
+            ptr=ptr->next;
+        }
+        for (int i = 0; i < 1+(end-start); i++)
+        {
+            t[i]=ptr->val;
+            ptr=ptr->next;
+        }
+        return t;
+        delete t;
     }
     ~myVector(){delete begin;}
 };
 
 int main(){
+    random_device rd{};
+    mt19937 engine{rd()};
+    uniform_real_distribution<double> dist(0.0,100.0);
     myVector<double> test;
     for (int i = 1; i < 11; i++){
-        test.addItem(i);
+        test.addItem(dist(engine));
     }
+    cout<<"10 Random Doubles Added"<<endl;
     for (int i = 0; i < 10; i++){
-        cout<<test.getItem(i)<<endl;
+        cout<<i<<" Index = "<<test.getItem(i)<<endl;
     }
     cout<<"Size of myVector = "<<test.getSize()<<endl;
-    cout<<test.getSum()<<endl;
-    cout<<test.getMax()<<endl;
+    cout<<"Sum of myVector = "<<test.getSum()<<endl;
+    cout<<"Max double = "<<test.getMax()<<endl;
+    cout<<"Min double = "<<test.getMin()<<endl;
+    int start = 2;
+    int end = 7;
+    cout<<"Creating new array from index "<<start<<" to index "<<end<<endl;
+    double* sliced_array = test.getSlice(start,end);
+    for (int i = 0; i < 1+(end-start); i++)
+    {
+        cout<<"Sliced array index "<<i<<": "<<sliced_array[i]<<endl;
+    }
+    delete sliced_array;
+
     return 0;
 }
