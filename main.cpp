@@ -4,6 +4,22 @@
 #include <functional>
 using namespace std;
 
+template <typename R>
+R randomR(R range_from, R range_to){
+    random_device rd{};
+    mt19937 engine{rd()};
+    uniform_real_distribution<R> dist(range_from,range_to);
+    return dist(engine);
+}
+
+template <typename I>
+I randomI(I range_from, I range_to){
+    random_device rd{};
+    mt19937 engine{rd()};
+    uniform_int_distribution<I> dist(range_from,range_to);
+    return dist(engine);
+}
+
 template <typename item>
 class myVector{
 private:
@@ -124,23 +140,20 @@ public:
 };
 
 int main(){
-    random_device rd{};
-    mt19937 engine{rd()};
-    uniform_real_distribution<double> dist(0.0,100.0);
     myVector<double> test;
-    for (int i = 1; i < 11; i++){
-        test.addItem(dist(engine));
+    for (int i = 1; i < randomI(11,20); i++){
+        test.addItem(randomR(0.0, 100.0));
     }
-    cout<<"10 Random Doubles Added"<<endl;
-    for (int i = 0; i < 10; i++){
+    int size = test.getSize();
+    cout<<size<<" Random Doubles Added"<<endl;
+    for (int i = 0; i < size; i++){
         cout<<i<<" Index = "<<test.getItem(i)<<endl;
     }
-    cout<<"Size of myVector = "<<test.getSize()<<endl;
     cout<<"Sum of myVector = "<<test.getSum()<<endl;
     cout<<"Max double = "<<test.getMax()<<endl;
     cout<<"Min double = "<<test.getMin()<<endl;
-    int start = 2;
-    int end = 7;
+    int start = randomI(0,size);
+    int end = randomI(start,size);
     cout<<"Creating new array from index "<<start<<" to index "<<end<<endl;
     double* sliced_array = test.getSlice(start,end);
     for (int i = 0; i < 1+(end-start); i++)
