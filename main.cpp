@@ -135,8 +135,9 @@ public:
         }
         return t;
         delete t;
+        t=NULL;
     }
-    ~myVector(){delete begin;}
+    ~myVector(){delete begin; begin=NULL;}
 };
 
 int main(){
@@ -161,6 +162,7 @@ int main(){
         cout<<"Sliced array index "<<i<<": "<<sliced_array[i]<<endl;
     }
     delete sliced_array;
+    sliced_array=NULL;
 
     return 0;
 }
